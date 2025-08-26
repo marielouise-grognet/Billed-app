@@ -16,11 +16,16 @@ const row = (bill) => {
         ${Actions(bill.fileUrl)}
       </td>
     </tr>
-    `)
-  }
+  `)
+}
 
 const rows = (data) => {
-  return (data && data.length) ? data.map(bill => row(bill)).join("") : ""
+  if (!data || !data.length) return ""
+  
+  
+  const sortedBills = [...data].sort((a, b) => (a.date < b.date ? 1 : -1))  //Tri décroissant : du plus récent au plus ancien
+
+  return sortedBills.map(bill => row(bill)).join("")
 }
 
 export default ({ data: bills, loading, error }) => {
@@ -57,8 +62,8 @@ export default ({ data: bills, loading, error }) => {
           <button type="button" data-testid='btn-new-bill' class="btn btn-primary">Nouvelle note de frais</button>
         </div>
         <div id="data-table">
-        <table id="example" class="table table-striped" style="width:100%">
-          <thead>
+          <table id="example" class="table table-striped" style="width:100%">
+            <thead>
               <tr>
                 <th>Type</th>
                 <th>Nom</th>
@@ -67,10 +72,10 @@ export default ({ data: bills, loading, error }) => {
                 <th>Statut</th>
                 <th>Actions</th>
               </tr>
-          </thead>
-          <tbody data-testid="tbody">
-            ${rows(bills)}
-          </tbody>
+            </thead>
+            <tbody data-testid="tbody">
+              ${rows(bills)}
+            </tbody>
           </table>
         </div>
       </div>

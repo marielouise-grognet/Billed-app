@@ -30,31 +30,32 @@ export default class {
   getBills = () => {
     if (this.store) {
       return this.store
-      .bills()
-      .list()
-      .then(snapshot => {
-        const bills = snapshot
-          .map(doc => {
-            try {
-              return {
-                ...doc,
-                date: formatDate(doc.date),
-                status: formatStatus(doc.status)
+        .bills()
+        .list()
+        .then(snapshot => {
+          // 1️⃣ Ajouter rawDate pour trier correctement
+          const bills = snapshot
+            .map(doc => ({
+              ...doc,
+              rawDate: new Date(doc.date), // pour tri
+              status: formatStatus(doc.status)
+            }))
+            // 2️⃣ Tri décroissant
+            .sort((a, b) => b.rawDate - a.rawDate)
+            // 3️⃣ Formater la date pour affichage
+            .map(doc => {
+              try {
+                return {
+                  ...doc,
+                  date: formatDate(doc.date)
+                }
+              } catch (e) {
+                console.log(e, 'for', doc)
+                return doc
               }
-            } catch(e) {
-              // if for some reason, corrupted data was introduced, we manage here failing formatDate function
-              // log the error and return unformatted date in that case
-              console.log(e,'for',doc)
-              return {
-                ...doc,
-                date: doc.date,
-                status: formatStatus(doc.status)
-              }
-            }
-          })
-          console.log('length', bills.length)
-        return bills
-      })
+            })
+          return bills
+        })
     }
   }
 }
