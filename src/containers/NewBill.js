@@ -16,26 +16,30 @@ export default class NewBill {
     new Logout({ document, localStorage, onNavigate })
   }
   handleChangeFile = e => {
-  e.preventDefault()
-  const file = e.target.files[0]
-  const filePath = e.target.value.split(/\\/g)
-  const fileName = filePath[filePath.length-1]
-  const allowedExtensions = ["jpg", "jpeg", "png"]
+    e.preventDefault()
+    const file = this.document.querySelector(`input[data-testid="file"]`).files[0]
+    const filePath = e.target.value.split(/\\/g)
+    const fileName = filePath[filePath.length-1]
+    const formData = new FormData()
+    const email = JSON.parse(localStorage.getItem("user")).email
+    formData.append('file', file)
+    formData.append('email', email)
 
-  // Récupération extension en minuscules
-  const fileExtension = fileName.split(".").pop().toLowerCase()
-
-  if (!allowedExtensions.includes(fileExtension)) {
-    alert("Seuls les fichiers JPG, JPEG ou PNG sont autorisés.")
-    e.target.value = "" // reset input
-    return
+    this.store
+      .bills()
+      .create({
+        data: formData,
+        headers: {
+          noContentType: true
+        }
+      })
+      .then(({fileUrl, key}) => {
+        console.log(fileUrl)
+        this.billId = key
+        this.fileUrl = fileUrl
+        this.fileName = fileName
+      }).catch(error => console.error(error))
   }
-
-  // ✅ Fichier accepté
-  this.fileName = fileName
-  this.file = file
-}
-
   handleSubmit = e => {
     e.preventDefault()
     console.log('e.target.querySelector(`input[data-testid="datepicker"]`).value', e.target.querySelector(`input[data-testid="datepicker"]`).value)
