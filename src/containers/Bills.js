@@ -33,16 +33,16 @@ export default class {
         .bills()
         .list()
         .then(snapshot => {
-          // 1️⃣ Ajouter rawDate pour trier correctement
+          // Ajoute rawDate pour trier correctement
           const bills = snapshot
             .map(doc => ({
               ...doc,
               rawDate: new Date(doc.date), // pour tri
               status: formatStatus(doc.status)
             }))
-            // 2️⃣ Tri décroissant
+            // Tri décroissant
             .sort((a, b) => b.rawDate - a.rawDate)
-            // 3️⃣ Formater la date pour affichage
+            // Formate la date pour affichage
             .map(doc => {
               try {
                 return {
