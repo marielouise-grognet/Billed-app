@@ -1,7 +1,6 @@
 import VerticalLayout from './VerticalLayout.js'
 import ErrorPage from "./ErrorPage.js"
 import LoadingPage from "./LoadingPage.js"
-
 import Actions from './Actions.js'
 
 const row = (bill) => {
@@ -20,11 +19,7 @@ const row = (bill) => {
 }
 
 const rows = (data) => {
-  if (!data || !data.length) return ""
-  
-  
   const sortedBills = [...data].sort((a, b) => (a.date < b.date ? 1 : -1))  //Tri décroissant : du plus récent au plus ancien
-
   return sortedBills.map(bill => row(bill)).join("")
 }
 

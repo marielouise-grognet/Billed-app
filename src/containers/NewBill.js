@@ -25,6 +25,15 @@ export default class NewBill {
     formData.append('file', file)
     formData.append('email', email)
 
+    // Vérification de l'extension 
+    const allowedExtensions = ["jpg", "jpeg", "png"]
+    const fileExtension = fileName.split('.').pop().toLowerCase()
+    if (!allowedExtensions.includes(fileExtension)){
+      alert("Seuls les fichiers JPG, JPEG ou PNG sont autorisés !")
+      e.target.value =""
+      return 
+    }
+
     this.store
       .bills()
       .create({
