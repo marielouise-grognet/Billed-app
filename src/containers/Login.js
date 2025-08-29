@@ -5,6 +5,7 @@ export let PREVIOUS_LOCATION = ''
 // we use a class so as to test its methods in e2e tests
 export default class Login {
   constructor({ document, localStorage, onNavigate, PREVIOUS_LOCATION, store }) {
+    console.log("constructor Login")
     this.document = document
     this.localStorage = localStorage
     this.onNavigate = onNavigate
@@ -15,6 +16,9 @@ export default class Login {
     const formAdmin = this.document.querySelector(`form[data-testid="form-admin"]`)
     formAdmin.addEventListener("submit", this.handleSubmitAdmin)
   }
+
+
+
   handleSubmitEmployee = e => {
     e.preventDefault()
     const user = {
