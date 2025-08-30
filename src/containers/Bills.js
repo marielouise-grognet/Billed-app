@@ -27,27 +27,26 @@ export default class {
     $('#modaleFile').modal('show')
   }
 
-  getBills = () => {
+  getBills = () => {                  // ICI, on répare le BUG 1 (view aura juste à gérer l'affichage ensuite...)
     if (this.store) {
       return this.store
         .bills()
         .list()
         .then(snapshot => {
-          // Ajoute rawDate pour trier correctement
           const bills = snapshot
             .map(doc => ({
               ...doc,
-              rawDate: new Date(doc.date), // pour tri
+              rawDate: new Date(doc.date),           //  Ajoute rawDate pour trier correctement
               status: formatStatus(doc.status)
             }))
-            // Tri décroissant
-            .sort((a, b) => b.rawDate - a.rawDate)
-            // Formate la date pour affichage
+
+            .sort((a, b) => b.rawDate - a.rawDate)   // Tri du plus récent au plus ancien
+
             .map(doc => {
               try {
                 return {
                   ...doc,
-                  date: formatDate(doc.date)
+                  date: formatDate(doc.date)         // Formate la date en vue de l'affichage 
                 }
               } catch (e) {
                 console.log(e, 'for', doc)

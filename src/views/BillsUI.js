@@ -19,14 +19,15 @@ const row = (bill) => {
 }
 
 const rows = (data) => {
-  if (!Array.isArray(data)) return ""; // <-- si data n'est pas un tableau, on retourne une string vide
-  const sortedBills = [...data].sort((a, b) => (a.date < b.date ? 1 : -1))  // Tri décroissant : du plus récent au plus ancien
-  return sortedBills.map(bill => row(bill)).join("")
+  if (!Array.isArray(data)) return "";
+
+  return data.map(bill => row(bill)).join("");
 }
 
 
-export default ({ data: bills =[], loading, error }) => {
-  
+
+export default ({ data: bills = [], loading, error }) => {
+
   const modal = () => (`
     <div class="modal fade" id="modaleFile" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
@@ -49,7 +50,7 @@ export default ({ data: bills =[], loading, error }) => {
   } else if (error) {
     return ErrorPage(error)
   }
-  
+
   return (`
     <div class='layout'>
       ${VerticalLayout(120)}

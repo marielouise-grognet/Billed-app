@@ -1,4 +1,4 @@
-// Dans ce fichier, nous avons corrigé les balises. Elles étaient ouvertes en h2 et fermées en H1...
+// Dans ce fichier, nous avons corrigé les balises. Elles étaient ouvertes en h2 et fermées en H1...(ligne 20 et ligne 34)
 export default () => {
 
   return(` 

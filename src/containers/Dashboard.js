@@ -90,11 +90,32 @@ handleEditTicket(bill) {
   $(`#open-bill${bill.id}`).css({ background: '#2A2B35' });  // Le ticket sélectionné devient noir 
   $('.dashboard-right-container div').html(DashboardFormUI(bill));   // On affiche le formulaire pour le ticket sélectionné
     // On rattache les boutons
-  $('#btn-accept-bill').off('click').click((e) => this.handleAcceptSubmit(e, bill));
-  $('#btn-refuse-bill').off('click').click((e) => this.handleRefuseSubmit(e, bill));
-  $('#icon-eye-d').off('click').click(this.handleClickIconEye);
+  $('#btn-accept-bill').off('click').click((e) => this.handleAcceptSubmit(e, bill)); // pour accepter la note de frais
+  $('#btn-refuse-bill').off('click').click((e) => this.handleRefuseSubmit(e, bill)); // la refuser
+  $('#icon-eye-d').off('click').click(this.handleClickIconEye); // afficher le justificatif.
 }
 
+handleShowTickets(e, bills, index) {
+  if (!this.counters) this.counters = {} // initialisation d'un compteur si inexistant
+  if (!this.counters[index]) this.counters[index] = 0 // ... un compteur par index (liste) qui commence à 0
+
+  const billsInList = filteredBills(bills, getStatus(index))   // On rattache les bills à leur liste
+
+  if (this.counters[index] % 2 === 0) { // Si pair...
+    $(`#arrow-icon${index}`).css({ transform: 'rotate(0deg)' }) // ..., flèche s'oriente vers le bas
+    $(`#status-bills-container${index}`).html(cards(billsInList)) // et les tickets de la liste s'affichent
+  } else {  // Si impair...
+    $(`#arrow-icon${index}`).css({ transform: 'rotate(90deg)' }) // ..., flèche s'oriente vers la droite
+    $(`#status-bills-container${index}`).html("") // et les tickets sont cachés.
+  }
+
+  this.counters[index]++ // incrémente le compteur pour alterner l'état au prochain clic (soit pair, soit impair..)
+
+
+  billsInList.forEach(bill => {
+    $(`#open-bill${bill.id}`).off('click').click(() => this.handleEditTicket(bill))   // On rattache les clicks aux tickets visibles de cette liste
+  })
+}
 
   handleAcceptSubmit = (e, bill) => {
     const newBill = {
@@ -116,27 +137,7 @@ handleEditTicket(bill) {
     this.onNavigate(ROUTES_PATH['Dashboard'])
   }
 
-handleShowTickets(e, bills, index) {
-  if (!this.counters) this.counters = {};
-  if (!this.counters[index]) this.counters[index] = 0;
 
-  const billsInList = filteredBills(bills, getStatus(index));   // On rattache les bills à leur liste
-
-  if (this.counters[index] % 2 === 0) { // Si pair...
-    $(`#arrow-icon${index}`).css({ transform: 'rotate(0deg)' }); // ..., flèche s'oriente vers le bas
-    $(`#status-bills-container${index}`).html(cards(billsInList)); // et les tickets de la liste s'affichent
-  } else {  // Si impair...
-    $(`#arrow-icon${index}`).css({ transform: 'rotate(90deg)' }); // ..., flèche s'oriente vers la droite
-    $(`#status-bills-container${index}`).html(""); // et les tickets sont cachés.
-  }
-
-  this.counters[index]++;
-
-
-  billsInList.forEach(bill => {
-    $(`#open-bill${bill.id}`).off('click').click(() => this.handleEditTicket(bill));   // On rattache les clicks aux tickets visibles de cette liste
-  });
-}
 
  
 
