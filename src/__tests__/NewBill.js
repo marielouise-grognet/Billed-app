@@ -17,6 +17,8 @@ describe("Given I am connected as an employee", () => {
     window.localStorage.setItem('user', JSON.stringify({ type: 'Employee', email: "test@test.com" }))
   })
 
+// TOUS LES TESTS CI-APRÈS ONT ÉTÉ CRÉÉS
+
   describe("When I am on NewBill Page", () => {
     test("Then the NewBill form should render", () => { // le formulaire de nouvelle note de frais devrait s'afficher
       const html = NewBillUI()
@@ -38,14 +40,11 @@ describe("Given I am connected as an employee", () => {
     })
 
 
-    // TEST D’INTÉGRATION
     test("Then submitting a valid NewBill should call store.bills().update and navigate to Bills", async () => { // on vérifie l’appel réel au store mocké (update) et la navigation
       document.body.innerHTML = NewBillUI()
       const onNavigate = jest.fn()
       const newBill = new NewBill({ document, onNavigate, store: mockStore, localStorage: window.localStorage })
-
       const updateSpy = jest.spyOn(mockStore.bills(), "update")       // On espionne la méthode update pour pouvoir faire toHaveBeenCalled() dessus ensuite
-
       // On remplit les champs
       screen.getByTestId("expense-type").value = "Transports"
       screen.getByTestId("expense-name").value = "Train Paris-Lyon"

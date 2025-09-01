@@ -25,12 +25,12 @@ export default class NewBill {
     formData.append('file', file)
     formData.append('email', email)
 
-    // Vérification de l'extension 
+    // ICI, on gère le BUG 3
     const allowedExtensions = ["jpg", "jpeg", "png"]
-    const fileExtension = fileName.split('.').pop().toLowerCase()
-    if (!allowedExtensions.includes(fileExtension)){
-      alert("Seuls les fichiers JPG, JPEG ou PNG sont autorisés !")
-      e.target.value =""
+    const fileExtension = fileName.split('.').pop().toLowerCase() // .split : on sépare la chaine de caractère avec à partir du séparateur "." ; .pop : on prend le dernier élément et on le renvoie dans fileExtension
+    if (!allowedExtensions.includes(fileExtension)){ // si le pop est différent des extensions autorisées....
+      alert("Seuls les fichiers JPG, JPEG ou PNG sont autorisés !") // message d'alerte
+      e.target.value ="" // fichier ne se charge pas.
       return 
     }
 

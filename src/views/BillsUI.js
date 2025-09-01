@@ -18,11 +18,13 @@ const row = (bill) => {
   `)
 }
 
-const rows = (data) => {
-  if (!Array.isArray(data)) return "";
-
-  return data.map(bill => row(bill)).join("");
+// BUG 1 : ici on assure que test passe au vert - donnée du mock sont triées ici à l'étape d'affichage avant de passer test.
+const rows = (data) => { 
+  if (!Array.isArray(data)) return ""
+  const sortedData = data.sort((a, b) => new Date(b.date) - new Date(a.date))
+  return sortedData.map(bill => row(bill)).join("")
 }
+
 
 
 

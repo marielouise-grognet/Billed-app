@@ -27,34 +27,35 @@ export default class {
     $('#modaleFile').modal('show')
   }
 
-  getBills = () => {                  // ICI, on répare le BUG 1 (view aura juste à gérer l'affichage ensuite...)
-    if (this.store) {
-      return this.store
-        .bills()
-        .list()
-        .then(snapshot => {
-          const bills = snapshot
-            .map(doc => ({
-              ...doc,
-              rawDate: new Date(doc.date),           //  Ajoute rawDate pour trier correctement
-              status: formatStatus(doc.status)
-            }))
+  getBills = () => { // ICI, on répare le BUG 1 (marche pour l'affichage mais pas pour le test - test ne reçoit pas les données triées de getBills mais les données non triées du mock
+  if (this.store) {
+    return this.store
+      .bills()
+      .list()
+      .then(snapshot => {
+        const bills = snapshot
+          .map(doc => ({
+            ...doc,
+            rawDate: new Date(doc.date),  // Ajoute rawDate pour trier correctement
+            status: formatStatus(doc.status)
+          }))
+          // TRI DU PLUS RÉCENT AU PLUS ANCIEN pour passer le test
+          .sort((a, b) => b.rawDate - a.rawDate) 
 
-            .sort((a, b) => b.rawDate - a.rawDate)   // Tri du plus récent au plus ancien
-
-            .map(doc => {
-              try {
-                return {
-                  ...doc,
-                  date: formatDate(doc.date)         // Formate la date en vue de l'affichage 
-                }
-              } catch (e) {
-                console.log(e, 'for', doc)
-                return doc
+          .map(doc => {
+            try {
+              return {
+                ...doc,
+                date: formatDate(doc.date) // Formate la date pour l'affichage
               }
-            })
-          return bills
-        })
-    }
+            } catch (e) {
+              console.log(e, 'for', doc)
+              return doc
+            }
+          })
+        return bills
+      })
   }
+}
+
 }
